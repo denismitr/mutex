@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use Denismitr\Mutex\Mutex;
 use PHPUnit\Framework\TestCase;

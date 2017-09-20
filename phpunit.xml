@@ -14,7 +14,7 @@
 >
     <testsuites>
         <testsuite name="Mutex">
-            <directory>./test/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
