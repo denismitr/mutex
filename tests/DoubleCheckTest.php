@@ -2,23 +2,24 @@
 
 namespace Tests;
 
-use Denismitr\Mutex\Mutex;
+use Denismitr\Mutex\Lock\FileLock;
+use Denismitr\Mutex\Lock\Lock;
 use Denismitr\Mutex\Utilities\DoubleCheck;
 use PHPUnit\Framework\TestCase;
 
 class DoubleCheckTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject The Mutex mock.
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $mutex;
+    public $lock;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->mutex = $this->createMock(Mutex::class);
-        $this->doubleCheck = new DoubleCheck($this->mutex);
+        $this->lock = $this->createMock(FileLock::class);
+        $this->doubleCheck = new DoubleCheck($this->lock);
     }
 
     /**
@@ -28,7 +29,7 @@ class DoubleCheckTest extends TestCase
      */
     public function it_fails_to_acquire_lock_if_callable_returns_false()
     {
-        $this->mutex->expects($this->never())->method("safe");
+        $this->lock->expects($this->never())->method("ex");
 
         $this->doubleCheck->try(function () {
             return false;
@@ -49,8 +50,8 @@ class DoubleCheckTest extends TestCase
         $lock  = 0;
         $check = 0;
 
-        $this->mutex->expects($this->once())
-                ->method("safe")
+        $this->lock->expects($this->once())
+                ->method("ex")
                 ->willReturnCallback(function (callable $block) use (&$lock) {
                     $lock++;
                     $block();
@@ -107,7 +108,7 @@ class DoubleCheckTest extends TestCase
      */
     public function it_does_not_execute_the_callable_if_one_of_the_checks_fails(callable $target)
     {
-        $this->mutex->expects($this->never())->method("safe");
+        $this->lock->expects($this->never())->method("ex");
 
         $this->doubleCheck->try($target);
 
@@ -123,8 +124,8 @@ class DoubleCheckTest extends TestCase
      */
     public function it_executes_callable_on_success_checks()
     {
-        $this->mutex->expects($this->once())
-                ->method("safe")
+        $this->lock->expects($this->once())
+                ->method("ex")
                 ->willReturnCallback(function (callable $block) {
                     return call_user_func($block);
                 });

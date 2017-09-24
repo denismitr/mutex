@@ -3,7 +3,7 @@
 use Denismitr\Mutex\Errors\LockAcquireError;
 use Denismitr\Mutex\Errors\LockReleaseError;
 
-class SemaphoreLock extends LockAbstract
+class SemaphoreLock extends Lock
 {
     /**
      * @var resource
@@ -45,7 +45,7 @@ class SemaphoreLock extends LockAbstract
     {
         if ( ! sem_acquire($this->semaphoreId) ) {
             throw new LockAcquireError(
-                "Failed to acquire the lock. Check the validity of your semaphore id id"
+                "Failed to acquire the lock. Check the validity of your semaphore id."
             );
         }
     }

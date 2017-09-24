@@ -4,15 +4,25 @@ namespace Denismitr\Mutex\Lock;
 
 use Closure;
 
-abstract class LockAbstract
+abstract class Lock
 {
+    protected $acquired = false;
+
     /**
-     * Execute the callback in the safe locked mode
+     * @return bool
+     */
+    public function isAcquired() : bool
+    {
+        return $this->acquired;
+    }
+
+    /**
+     * Execute the callback in the exclusively locked mode
      *
      * @param Closure $callback
      * @return mixed
      */
-    public function safe(Closure $callback)
+    public function ex(Closure $callback)
     {
         $this->acquire();
 

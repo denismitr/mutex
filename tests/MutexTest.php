@@ -2,16 +2,17 @@
 
 namespace Tests;
 
+use Denismitr\Mutex\Lock\FileLock;
 use Denismitr\Mutex\Mutex;
 use PHPUnit\Framework\TestCase;
 
 class MutexTest extends TestCase
 {
     /** @test */
-    public function it_can_be_instantiated()
+    public function it_can_create_file_lock()
     {
-        $mutex = new Mutex();
+        $lock = Mutex::fileLock(__FILE__);
 
-        $this->assertInstanceOf(Mutex::class, $mutex);
+        $this->assertInstanceOf(FileLock::class, $lock);
     }
 }

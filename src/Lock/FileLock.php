@@ -4,7 +4,7 @@ namespace Denismitr\Mutex\Lock;
 
 use Closure;
 
-class FileLock extends LockAbstract
+class FileLock extends Lock
 {
     /**
      * @var resource
@@ -17,7 +17,7 @@ class FileLock extends LockAbstract
      * @param resource $fileHandle
      * @throws \InvalidArgumentException
      */
-    public function __construct(resource $fh)
+    public function __construct($fh)
     {
         if ( ! is_resource($fh) ) {
             throw new \InvalidArgumentException(
@@ -36,11 +36,13 @@ class FileLock extends LockAbstract
      */
     public function acquire()
     {
-        if ( ! sem_acquire($this->semaphoreId) ) {
+        if ( ! flock($this->fh, LOCK_EX) ) {
             throw new LockAcquireError(
-                "Failed to acquire the lock. Check the validity of your semaphore id id"
+                "Failed to acquire the lock. Check the validity of your file handle"
             );
         }
+
+        $this->acquired = true;
     }
 
     /**
@@ -51,10 +53,12 @@ class FileLock extends LockAbstract
      */
     public function release()
     {
-        if ( ! sem_release($this->semaphoreId) ) {
+        if ( ! flock($this->fh, LOCK_UN) ) {
             throw new LockReleaseError(
-                "Failed to release the lock. Check the validity of your semaphore id"
+                "Failed to release the lock. Check the validity of your file handle"
             );
         }
+
+        $this->acquired = false;
     }
 }
