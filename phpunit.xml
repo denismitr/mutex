@@ -5,10 +5,9 @@
          verbose="true"
          bootstrap="vendor/autoload.php"
          convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         convertNoticesToExceptions="true"
          processIsolation="false"
-         stopOnError="true"
          stopOnFailure="false"
          syntaxCheck="true"
 >

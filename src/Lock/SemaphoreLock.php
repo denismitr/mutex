@@ -1,5 +1,7 @@
 <?php
 
+namespace Denismitr\Mutex\Lock;
+
 use Denismitr\Mutex\Errors\LockAcquireError;
 use Denismitr\Mutex\Errors\LockReleaseError;
 
@@ -24,9 +26,9 @@ class SemaphoreLock extends Lock
      * @param resource semaphore The semaphore id.
      * @throws \InvalidArgumentException The semaphore id is not a valid resource.
      */
-    public function __construct(resource $semaphoreId)
+    public function __construct($semaphoreId)
     {
-        if (!is_resource($semaphoreId)) {
+        if ( ! is_resource($semaphoreId) ) {
             throw new \InvalidArgumentException(
                 "The semaphore id is not a valid resource."
             );
@@ -48,6 +50,8 @@ class SemaphoreLock extends Lock
                 "Failed to acquire the lock. Check the validity of your semaphore id."
             );
         }
+
+        $this->acquired = true;
     }
 
     /**
@@ -63,5 +67,7 @@ class SemaphoreLock extends Lock
                 "Failed to release the lock. Check the validity of your semaphore id"
             );
         }
+
+        $this->acquired = false;
     }
 }

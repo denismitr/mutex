@@ -2,12 +2,11 @@
 
 namespace Tests;
 
-use Denismitr\Mutex\Lock\FileLock;
-use Denismitr\Mutex\Mutex;
+use Denismitr\Mutex\Lock\SemaphoreLock;
 use PHPUnit\Framework\TestCase;
 use Tests\Traits\LockState;
 
-class FileLockTest extends TestCase
+class SemaphoreLockTest extends TestCase
 {
     use LockState;
 
@@ -20,14 +19,18 @@ class FileLockTest extends TestCase
     {
         parent::setUp();
 
-        $this->fh = fopen("./tests/tmp/lock.lock", "r+");
+        $this->semaphoreId = sem_get(
+            ftok(__FILE__, "R")
+        );
 
-        $this->lock = new FileLock($this->fh);
+        $this->lock = new SemaphoreLock($this->semaphoreId);
     }
 
     /** @test */
     public function it_can_acquire_and_release_lock()
     {
+        $this->assertFalse($this->lock->isAcquired());
+
         $this->lock->acquire();
 
         $this->assertTrue($this->lock->isAcquired());
