@@ -1,8 +1,9 @@
 <?php
 
-namespace Denismitr\Mutex;
+namespace Denismitr\Mutex\Utilities;
 
 use Closure;
+use Denismitr\Mutex\Mutex;
 
 class DoubleCheck
 {

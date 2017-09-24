@@ -1,8 +1,8 @@
 <?php
 
-namespace Denismitr\Mutex;
+namespace Denismitr\Mutex\Utilities;
 
-use Denismitr\Mutex\Exceptions\TimeoutError;
+use Denismitr\Mutex\Errors\TimeoutError;
 
 class Loop
 {
@@ -36,7 +36,7 @@ class Loop
      * Call the callback function until the time runs out.
      *
      * @param callable $callback
-     * @throws \Denismitr\Mutex\Exceptions\TimeoutError
+     * @throws \Denismitr\Mutex\Errors\TimeoutError
      * @return mixed
      */
     public function run(callable $callback)

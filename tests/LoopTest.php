@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Denismitr\Mutex\Loop;
+use Denismitr\Mutex\Utilities\Loop;
 use PHPUnit\Framework\TestCase;
 use phpmock\environment\SleepEnvironmentBuilder;
 use phpmock\phpunit\PHPMock;
@@ -52,7 +52,7 @@ class LoopTest extends TestCase
     /**
     * @test
     *
-    * @expectedException \Denismitr\Mutex\Exceptions\TimeoutError
+    * @expectedException \Denismitr\Mutex\Errors\TimeoutError
     * @expectedExceptionMessage Timeout exceeded.
     */
     public function it_exceeds_the_given_timeout_without_stop()

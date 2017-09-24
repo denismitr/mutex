@@ -1,6 +1,6 @@
 <?php
 
-namespace Denismitr\Mutex\Exceptions;
+namespace Denismitr\Mutex\Errors;
 
 class TimeoutError extends MutexError
 {}

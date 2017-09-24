@@ -3,7 +3,7 @@
 namespace Tests;
 
 use Denismitr\Mutex\Mutex;
-use Denismitr\Mutex\DoubleCheck;
+use Denismitr\Mutex\Utilities\DoubleCheck;
 use PHPUnit\Framework\TestCase;
 
 class DoubleCheckTest extends TestCase
