@@ -4,13 +4,13 @@ namespace Tests;
 
 use Denismitr\Mutex\Lock\FileLock;
 use Denismitr\Mutex\Lock\Lock;
-use Denismitr\Mutex\Utilities\DoubleCheck;
+use Denismitr\Mutex\Utilities\Check;
 use PHPUnit\Framework\TestCase;
 
-class DoubleCheckTest extends TestCase
+class CheckTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Lock
      */
     public $lock;
 
@@ -19,7 +19,7 @@ class DoubleCheckTest extends TestCase
         parent::setUp();
 
         $this->lock = $this->createMock(FileLock::class);
-        $this->doubleCheck = new DoubleCheck($this->lock);
+        $this->check = new Check($this->lock);
     }
 
     /**
@@ -31,11 +31,11 @@ class DoubleCheckTest extends TestCase
     {
         $this->lock->expects($this->never())->method("safe");
 
-        $this->doubleCheck->try(function () {
+        $this->check->try(function () {
             return false;
         });
 
-        $this->doubleCheck->then(function () {
+        $this->check->then(function () {
             $this->fail();
         });
     }
@@ -58,7 +58,7 @@ class DoubleCheckTest extends TestCase
                     $lock++;
                 });
 
-        $this->doubleCheck->try(function () use (&$lock, &$check) {
+        $this->check->try(function () use (&$lock, &$check) {
             if ($check == 1) {
                 $this->assertEquals(1, $lock);
             }
@@ -68,7 +68,7 @@ class DoubleCheckTest extends TestCase
             return true;
         });
 
-        $this->doubleCheck->then(function () use (&$lock) {
+        $this->check->then(function () use (&$lock) {
             $this->assertEquals(1, $lock);
         });
 
@@ -110,9 +110,9 @@ class DoubleCheckTest extends TestCase
     {
         $this->lock->expects($this->never())->method("safe");
 
-        $this->doubleCheck->try($target);
+        $this->check->try($target);
 
-        $this->doubleCheck->then(function () {
+        $this->check->then(function () {
             $this->fail();
         });
     }
@@ -130,13 +130,13 @@ class DoubleCheckTest extends TestCase
                     return call_user_func($block);
                 });
 
-        $this->doubleCheck->try(function () {
+        $this->check->try(function () {
             return true;
         });
 
         $executed = false;
 
-        $this->doubleCheck->then(function () use (&$executed) {
+        $this->check->then(function () use (&$executed) {
             $executed = true;
         });
 

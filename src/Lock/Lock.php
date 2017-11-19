@@ -3,10 +3,13 @@
 namespace Denismitr\Mutex\Lock;
 
 use Closure;
+use Denismitr\Mutex\Utilities\Check;
 
 abstract class Lock
 {
     protected $acquired = false;
+
+    protected $check;
 
     /**
      * @return bool
@@ -14,6 +17,19 @@ abstract class Lock
     public function isAcquired() : bool
     {
         return $this->acquired;
+    }
+
+    /**
+     * @param Closure $target
+     * @return Check
+     */
+    public function try(Closure $target)
+    {
+        $this->check = $this->check ?: new Check($this);
+
+        $this->check->try($target);
+
+        return $this->check;
     }
 
     /**

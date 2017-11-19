@@ -5,7 +5,7 @@ namespace Denismitr\Mutex\Utilities;
 use Closure;
 use Denismitr\Mutex\Lock\Lock;
 
-class DoubleCheck
+class Check
 {
     /**
      * @var Lock.
