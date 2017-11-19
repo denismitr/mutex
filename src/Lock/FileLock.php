@@ -28,6 +28,18 @@ class FileLock extends Lock
         $this->fh = $fh;
     }
 
+
+    /**
+     * Destructor
+     * @return void
+     */
+    public function __destruct()
+    {
+        if (is_resource($this->fh)) {
+            fclose($this->fh);
+        }
+    }
+
     /**
      * Obtain the lock
      *

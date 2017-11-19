@@ -23,7 +23,7 @@ class SemaphoreLock extends Lock
      * $mutex = MutexFactory::makeSemaphore($semaphoreId);
      * </code>
      *
-     * @param resource semaphore The semaphore id.
+     * @param resource semaphoreId The semaphore id.
      * @throws \InvalidArgumentException The semaphore id is not a valid resource.
      */
     public function __construct($semaphoreId)

@@ -2,7 +2,7 @@
 
 namespace Denismitr\Mutex\Lock;
 
-use Closure;
+use Denismitr\Mutex\Errors\LockReleaseError;
 use Predis;
 
 class PredisLock extends Lock
@@ -18,15 +18,27 @@ class PredisLock extends Lock
     private $key;
 
     /**
-     * Instantiate from file handle.
-     *
-     * @param resource $fileHandle
-     * @throws \InvalidArgumentException
+     * @var int
      */
-    public function __construct(Predis\Client $client, string $key)
+    private $timeout;
+
+    /**
+     * @var string
+     */
+    private $token;
+
+    /**
+     * PredisLock constructor.
+     * @param Predis\Client $client
+     * @param string $key
+     * @param int $timeout
+     */
+    public function __construct(Predis\Client $client, string $key, int $timeout = 0)
     {
         $this->client = $client;
-        $this->key = $key;
+        $this->key = "Lock:{$key}";
+        $this->timeout = $timeout;
+        $this->token = uniqid(true);
     }
 
     /**
@@ -37,11 +49,11 @@ class PredisLock extends Lock
      */
     public function acquire()
     {
-        if ( ! $this->client->setnx($key, true) ) {
-            throw new LockAcquireError(
-                "Failed to acquire the lock. Check the validity of your key"
-            );
+        if ( $this->client->getset("{$this->key}:start", 1) !== 1 ) {
+            $this->client->lpush($this->key, [$this->token]);
         }
+
+        $this->client->blpop([$this->key], $this->timeout);
 
         $this->acquired = true;
     }
@@ -54,13 +66,15 @@ class PredisLock extends Lock
      */
     public function release()
     {
-        if ( ! $this->client->exists($this->key) ) {
+        if ( ! $this->client->exists("{$this->key}:start") ) {
             throw new LockReleaseError(
                 "Failed to release the lock. Check the validity of your file handle"
             );
         }
 
-        $this->client->delete($this->key);
+        $this->client->lpush($this->key, [$this->token]);
+
+        $this->client->del(["{$this->key}:start", $this->key]);
 
         $this->acquired = false;
     }
