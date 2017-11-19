@@ -22,7 +22,7 @@ abstract class Lock
      * @param Closure $callback
      * @return mixed
      */
-    public function ex(Closure $callback)
+    public function safe(Closure $callback)
     {
         $this->acquire();
 

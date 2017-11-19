@@ -9,7 +9,7 @@ trait LockState
     {
         $this->assertFalse($this->lock->isAcquired());
 
-        $this->lock->ex(function() {
+        $this->lock->safe(function() {
             $this->assertTrue($this->lock->isAcquired());
         });
 

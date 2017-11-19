@@ -29,7 +29,7 @@ class DoubleCheckTest extends TestCase
      */
     public function it_fails_to_acquire_lock_if_callable_returns_false()
     {
-        $this->lock->expects($this->never())->method("ex");
+        $this->lock->expects($this->never())->method("safe");
 
         $this->doubleCheck->try(function () {
             return false;
@@ -51,7 +51,7 @@ class DoubleCheckTest extends TestCase
         $check = 0;
 
         $this->lock->expects($this->once())
-                ->method("ex")
+                ->method("safe")
                 ->willReturnCallback(function (callable $block) use (&$lock) {
                     $lock++;
                     $block();
@@ -108,7 +108,7 @@ class DoubleCheckTest extends TestCase
      */
     public function it_does_not_execute_the_callable_if_one_of_the_checks_fails(callable $target)
     {
-        $this->lock->expects($this->never())->method("ex");
+        $this->lock->expects($this->never())->method("safe");
 
         $this->doubleCheck->try($target);
 
@@ -125,7 +125,7 @@ class DoubleCheckTest extends TestCase
     public function it_executes_callable_on_success_checks()
     {
         $this->lock->expects($this->once())
-                ->method("ex")
+                ->method("safe")
                 ->willReturnCallback(function (callable $block) {
                     return call_user_func($block);
                 });

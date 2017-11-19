@@ -24,14 +24,14 @@ class LockAbstractTest extends TestCase
     {
         $this->lock->expects($this->once())->method('acquire');
 
-        $this->lock->ex(function() {});
+        $this->lock->safe(function() {});
     }
 
     /** @test */
     public function it_releases_lock_after_callback_has_been_executed()
     {
         $this->lock->expects($this->once())->method('release');
-        $this->lock->ex(function() {});
+        $this->lock->safe(function() {});
     }
 
     /** @test */
@@ -40,7 +40,7 @@ class LockAbstractTest extends TestCase
         $this->lock->expects($this->once())->method('release');
 
         try {
-            $this->lock->ex(function() {
+            $this->lock->safe(function() {
                 throw new \Exception;
             });
         } catch (\Exception $e) {}

@@ -50,7 +50,7 @@ class DoubleCheck
             return;
         }
 
-        $this->lock->ex(function () use ($callable) {
+        $this->lock->safe(function () use ($callable) {
             if ( call_user_func($this->target) ) {
                 call_user_func($callable);
             }
