@@ -3,7 +3,7 @@
 namespace Tests;
 
 use Denismitr\Mutex\Loop\Loop;
-use Denismitr\Mutex\Mutex;
+use Denismitr\Mutex\MutexFactory;
 use PHPUnit\Framework\TestCase;
 use phpmock\environment\SleepEnvironmentBuilder;
 use phpmock\phpunit\PHPMock;
@@ -44,7 +44,7 @@ class LoopTest extends TestCase
     /** @test */
     public function it_can_be_run_from_the_file_lock()
     {
-        $lock = Mutex::fileLock(__FILE__);
+        $lock = MutexFactory::fileLock(__FILE__);
 
         $result = $lock->loop(5, function($loop, $i) {
             usleep(1);
@@ -68,7 +68,7 @@ class LoopTest extends TestCase
             'database' => 0,
         ]);
 
-        $lock = Mutex::pRedisLock($redis, 'some-key');
+        $lock = MutexFactory::pRedisLock($redis, 'some-key');
 
         $result = $lock->loop(5, function($loop, $i) {
             usleep(1);
@@ -86,7 +86,7 @@ class LoopTest extends TestCase
     /** @test */
     public function it_can_be_run_from_the_semaphore_test()
     {
-        $lock = Mutex::semaphoreLock(__FILE__);
+        $lock = MutexFactory::semaphoreLock(__FILE__);
 
         $result = $lock->loop(5, function($loop, $i) {
             usleep(1);

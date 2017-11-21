@@ -11,7 +11,7 @@ class FileLockTest extends TestCase
     use LockState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject The Mutex mock.
+     * @var \PHPUnit_Framework_MockObject_MockObject The MutexFactory mock.
      */
     private $lock;
 

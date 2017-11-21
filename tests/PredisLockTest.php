@@ -3,7 +3,7 @@
 namespace Tests;
 
 use Denismitr\Mutex\Lock\PredisLock;
-use Denismitr\Mutex\Mutex;
+use Denismitr\Mutex\MutexFactory;
 use PHPUnit\Framework\TestCase;
 use Predis\Client;
 use Tests\Traits\LockState;
@@ -29,7 +29,7 @@ class PredisLockTest extends TestCase
             'database' => 0,
         ]);
 
-        $this->lock = Mutex::pRedisLock($this->redis, "my-key", 20);
+        $this->lock = MutexFactory::pRedisLock($this->redis, "my-key", 20);
     }
 
     /** @test */

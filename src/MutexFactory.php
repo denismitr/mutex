@@ -2,14 +2,13 @@
 
 namespace Denismitr\Mutex;
 
-use Closure;
+
 use Denismitr\Mutex\Lock\FileLock;
-use Denismitr\Mutex\Lock\LockAbstract;
 use Denismitr\Mutex\Lock\PredisLock;
 use Denismitr\Mutex\Lock\SemaphoreLock;
 use Predis\Client;
 
-class Mutex
+class MutexFactory
 {
     /**
      * @param string $filename
@@ -37,9 +36,9 @@ class Mutex
      * @param string $filename
      * @return SemaphoreLock
      */
-    public static function semaphoreLock(string $filename) : SemaphoreLock
+    public static function semaphoreLock(string $filename, string $proj = "a") : SemaphoreLock
     {
-        $semaphoreId = sem_get(ftok($filename, "a"));
+        $semaphoreId = sem_get(ftok($filename, $proj));
 
         return new SemaphoreLock($semaphoreId);
     }

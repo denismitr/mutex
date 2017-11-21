@@ -5,16 +5,16 @@ namespace Tests;
 use Denismitr\Mutex\Lock\FileLock;
 use Denismitr\Mutex\Lock\PredisLock;
 use Denismitr\Mutex\Lock\SemaphoreLock;
-use Denismitr\Mutex\Mutex;
+use Denismitr\Mutex\MutexFactory;
 use PHPUnit\Framework\TestCase;
 use Predis\Client;
 
-class MutexTest extends TestCase
+class MutexFactoryTest extends TestCase
 {
     /** @test */
     public function it_can_create_file_lock()
     {
-        $lock = Mutex::fileLock(__FILE__);
+        $lock = MutexFactory::fileLock(__FILE__);
 
         $this->assertInstanceOf(FileLock::class, $lock);
     }
@@ -22,7 +22,7 @@ class MutexTest extends TestCase
     /** @test */
     public function it_can_create_a_semaphore_lock()
     {
-        $lock = Mutex::semaphoreLock(__FILE__);
+        $lock = MutexFactory::semaphoreLock(__FILE__);
 
         $this->assertInstanceOf(SemaphoreLock::class, $lock);
     }
@@ -30,7 +30,7 @@ class MutexTest extends TestCase
     /** @test */
     public function it_can_create_predis_lock()
     {
-        $lock = Mutex::pRedisLock(new Client,'some-key');
+        $lock = MutexFactory::pRedisLock(new Client,'some-key');
 
         $this->assertInstanceOf(PredisLock::class, $lock);
     }
