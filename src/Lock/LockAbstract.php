@@ -6,6 +6,7 @@ namespace Denismitr\Mutex\Lock;
 use Closure;
 use Denismitr\Mutex\Check\DoubleCheck;
 use Denismitr\Mutex\Contracts\CheckInterface;
+use Denismitr\Mutex\Loop\Loop;
 
 abstract class LockAbstract
 {
@@ -44,6 +45,24 @@ abstract class LockAbstract
 
         try {
             return $callback();
+        } finally {
+            $this->release();
+        }
+    }
+
+    /**
+     * @param int $timeout
+     * @param Closure $callback
+     * @return mixed|null
+     */
+    public function loop(int $timeout, Closure $callback)
+    {
+        $loop = new Loop($timeout);
+
+        $this->acquire();
+
+        try {
+            return $loop->run($callback);
         } finally {
             $this->release();
         }

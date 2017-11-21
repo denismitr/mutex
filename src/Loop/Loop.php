@@ -3,9 +3,11 @@
 namespace Denismitr\Mutex\Loop;
 
 
+use Denismitr\Mutex\Contracts\LoopInterface;
 use Denismitr\Mutex\Errors\TimeoutError;
+use Closure;
 
-class Loop
+class Loop implements LoopInterface
 {
     /**
      * Timeout in seconds
@@ -36,11 +38,11 @@ class Loop
     /**
      * Call the callback function until the time runs out.
      *
-     * @param callable $callback
-     * @throws \Denismitr\Mutex\Errors\TimeoutError
-     * @return mixed
+     * @param Closure $callback
+     * @return mixed|null
+     * @throws TimeoutError
      */
-    public function run(callable $callback)
+    public function run(Closure $callback)
     {
         $this->loop = true;
 
@@ -50,7 +52,7 @@ class Loop
 
         for ($i = 0; $this->loop && microtime(true) < $timeout; $i++) {
             // Call the callback and pass this as only argument
-            $result = $callback($this);
+            $result = $callback($this, $i);
 
             if ( ! $this->loop ) {
                 break;

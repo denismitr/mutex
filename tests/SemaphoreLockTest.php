@@ -21,7 +21,7 @@ class SemaphoreLockTest extends TestCase
 
         if (function_exists('sem_get')) {
             $this->semaphoreId = sem_get(
-                ftok(__FILE__, "R")
+                ftok(__FILE__, "r")
             );
 
             $this->lock = new SemaphoreLock($this->semaphoreId);

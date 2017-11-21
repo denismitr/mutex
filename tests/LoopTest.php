@@ -3,9 +3,11 @@
 namespace Tests;
 
 use Denismitr\Mutex\Loop\Loop;
+use Denismitr\Mutex\Mutex;
 use PHPUnit\Framework\TestCase;
 use phpmock\environment\SleepEnvironmentBuilder;
 use phpmock\phpunit\PHPMock;
+use Predis\Client;
 
 class LoopTest extends TestCase
 {
@@ -37,6 +39,66 @@ class LoopTest extends TestCase
         });
 
         $this->assertEquals('result', $result);
+    }
+
+    /** @test */
+    public function it_can_be_run_from_the_file_lock()
+    {
+        $lock = Mutex::fileLock(__FILE__);
+
+        $result = $lock->loop(5, function($loop, $i) {
+            usleep(1);
+
+            if ($i >= 10) {
+                $loop->stop();
+            }
+
+            return 'loop_index:' . $i;
+        });
+
+        $this->assertEquals('loop_index:10', $result);
+    }
+
+    /** @test */
+    public function it_can_be_run_from_the_predis_lock()
+    {
+        $redis = new Client([
+            'host' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ]);
+
+        $lock = Mutex::pRedisLock($redis, 'some-key');
+
+        $result = $lock->loop(5, function($loop, $i) {
+            usleep(1);
+
+            if ($i >= 12) {
+                $loop->stop();
+            }
+
+            return 'loop_index:' . $i;
+        });
+
+        $this->assertEquals('loop_index:12', $result);
+    }
+
+    /** @test */
+    public function it_can_be_run_from_the_semaphore_test()
+    {
+        $lock = Mutex::semaphoreLock(__FILE__);
+
+        $result = $lock->loop(5, function($loop, $i) {
+            usleep(1);
+
+            if ($i >= 12) {
+                $loop->stop();
+            }
+
+            return 'loop_index:' . $i;
+        });
+
+        $this->assertEquals('loop_index:12', $result);
     }
 
     /**

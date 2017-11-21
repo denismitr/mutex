@@ -33,4 +33,11 @@ interface LockInterface
      * @return mixed
      */
     public function try(Closure $callback) : CheckInterface;
+
+    /**
+     * @param int $timeout
+     * @param Closure $callback
+     * @return mixed
+     */
+    public function loop(int $timeout, Closure $callback);
 }
