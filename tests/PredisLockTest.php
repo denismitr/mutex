@@ -37,14 +37,14 @@ class PredisLockTest extends TestCase
     {
         $this->lock->acquire();
 
-        $this->assertEquals(1, $this->redis->get("Lock:my-key:start"));
+        $this->assertEquals(1, $this->redis->get("LockAbstract:my-key:start"));
 
         $this->assertTrue($this->lock->isAcquired());
 
         $this->lock->release();
 
         $this->assertFalse($this->lock->isAcquired());
-        $this->assertEquals(0, $this->redis->exists("Lock:my-key:start"));
+        $this->assertEquals(0, $this->redis->exists("LockAbstract:my-key:start"));
     }
 
     /** @test */

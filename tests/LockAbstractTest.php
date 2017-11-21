@@ -2,8 +2,7 @@
 
 namespace Tests;
 
-use Denismitr\Mutex\Utilities\Check;
-use Denismitr\Mutex\Lock\Lock;
+use Denismitr\Mutex\Lock\LockAbstract;
 use PHPUnit\Framework\TestCase;
 
 class LockAbstractTest extends TestCase
@@ -14,9 +13,7 @@ class LockAbstractTest extends TestCase
     {
         parent::setUp();
 
-        $this->lock = $this->getMockForAbstractClass(Lock::class);
-
-        // new Check($this->lock);
+        $this->lock = $this->getMockForAbstractClass(LockAbstract::class);
     }
 
     /** @test */

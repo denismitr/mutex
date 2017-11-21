@@ -1,6 +1,7 @@
 <?php
 
-namespace Denismitr\Mutex\Utilities;
+namespace Denismitr\Mutex\Loop;
+
 
 use Denismitr\Mutex\Errors\TimeoutError;
 
@@ -66,7 +67,7 @@ class Loop
             throw new TimeoutError("Timeout exceeded.");
         }
 
-        return $result;
+        return $result ?? null;
     }
 
     /**

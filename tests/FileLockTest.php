@@ -3,7 +3,6 @@
 namespace Tests;
 
 use Denismitr\Mutex\Lock\FileLock;
-use Denismitr\Mutex\Mutex;
 use PHPUnit\Framework\TestCase;
 use Tests\Traits\LockState;
 

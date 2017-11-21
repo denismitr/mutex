@@ -2,10 +2,12 @@
 
 namespace Denismitr\Mutex\Lock;
 
+
+use Denismitr\Mutex\Contracts\LockInterface;
 use Denismitr\Mutex\Errors\LockReleaseError;
 use Predis;
 
-class PredisLock extends Lock
+class PredisLock extends LockAbstract implements LockInterface
 {
     /**
      * @var resource
@@ -36,7 +38,7 @@ class PredisLock extends Lock
     public function __construct(Predis\Client $client, string $key, int $timeout = 0)
     {
         $this->client = $client;
-        $this->key = "Lock:{$key}";
+        $this->key = "LockAbstract:{$key}";
         $this->timeout = $timeout;
         $this->token = uniqid(true);
     }

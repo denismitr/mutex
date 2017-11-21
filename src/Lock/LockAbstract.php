@@ -2,14 +2,14 @@
 
 namespace Denismitr\Mutex\Lock;
 
-use Closure;
-use Denismitr\Mutex\Utilities\Check;
 
-abstract class Lock
+use Closure;
+use Denismitr\Mutex\Check\DoubleCheck;
+use Denismitr\Mutex\Contracts\CheckInterface;
+
+abstract class LockAbstract
 {
     protected $acquired = false;
-
-    protected $check;
 
     /**
      * @return bool
@@ -21,15 +21,15 @@ abstract class Lock
 
     /**
      * @param Closure $target
-     * @return Check
+     * @return CheckInterface
      */
-    public function try(Closure $target)
+    public function try(Closure $target) : CheckInterface
     {
-        $this->check = $this->check ?: new Check($this);
+        $check = new DoubleCheck($this);
 
-        $this->check->try($target);
+        $check->try($target);
 
-        return $this->check;
+        return $check;
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Denismitr\Mutex;
 
 use Closure;
 use Denismitr\Mutex\Lock\FileLock;
-use Denismitr\Mutex\Lock\Lock;
+use Denismitr\Mutex\Lock\LockAbstract;
 use Denismitr\Mutex\Lock\PredisLock;
 use Denismitr\Mutex\Lock\SemaphoreLock;
 use Predis\Client;

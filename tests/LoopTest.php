@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Denismitr\Mutex\Utilities\Loop;
+use Denismitr\Mutex\Loop\Loop;
 use PHPUnit\Framework\TestCase;
 use phpmock\environment\SleepEnvironmentBuilder;
 use phpmock\phpunit\PHPMock;

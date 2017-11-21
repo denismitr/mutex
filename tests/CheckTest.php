@@ -2,15 +2,15 @@
 
 namespace Tests;
 
+use Denismitr\Mutex\Check\DoubleCheck;
 use Denismitr\Mutex\Lock\FileLock;
-use Denismitr\Mutex\Lock\Lock;
-use Denismitr\Mutex\Utilities\Check;
+use Denismitr\Mutex\Lock\LockAbstract;
 use PHPUnit\Framework\TestCase;
 
 class CheckTest extends TestCase
 {
     /**
-     * @var Lock
+     * @var LockAbstract
      */
     public $lock;
 
@@ -19,7 +19,7 @@ class CheckTest extends TestCase
         parent::setUp();
 
         $this->lock = $this->createMock(FileLock::class);
-        $this->check = new Check($this->lock);
+        $this->check = new DoubleCheck($this->lock);
     }
 
     /**

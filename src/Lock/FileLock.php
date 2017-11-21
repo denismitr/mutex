@@ -2,9 +2,10 @@
 
 namespace Denismitr\Mutex\Lock;
 
-use Closure;
 
-class FileLock extends Lock
+use Denismitr\Mutex\Contracts\LockInterface;
+
+class FileLock extends LockAbstract implements LockInterface
 {
     /**
      * @var resource

@@ -2,10 +2,12 @@
 
 namespace Denismitr\Mutex\Lock;
 
+
+use Denismitr\Mutex\Contracts\LockInterface;
 use Denismitr\Mutex\Errors\LockAcquireError;
 use Denismitr\Mutex\Errors\LockReleaseError;
 
-class SemaphoreLock extends Lock
+class SemaphoreLock extends LockAbstract implements LockInterface
 {
     /**
      * @var resource
